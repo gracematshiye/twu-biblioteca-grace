@@ -9,11 +9,15 @@ import java.util.List;
  */
 public class Biblioteca {
 
-    private List<String> listOfAllLibrabryBooks;
-    private String listOfBooksInColumn;
-
     public void welcomeMessage() {
         System.out.print( "Hello there, Welcome to our Biblioteca\n");
     }
 
+    public void displayListOfBook(List<String> listOfBooks) {
+        String message = "";
+        for (int i = 0; i < listOfBooks.size(); i++) {
+            message += i+1 + ". " + listOfBooks.get(i) + "\n";
+        }
+        System.out.print(message);
+    }
 }
