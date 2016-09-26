@@ -60,5 +60,24 @@ public class BibliotecaTest {
 
     }
 
+    @Test
+    public void listOfBooksInDetailsAreDisplayed() throws Exception {
 
+        Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
+        List<Book> aBookList = new ArrayList<Book>();
+        aBookList.add(book1);
+        aBookList.add(book2);
+
+        biblioteca.printBooksInDetails(aBookList);
+        String expectOutput = new String(outSpy.toByteArray());
+
+        assertTrue(expectOutput.contains("Building with Gradle"));
+        assertTrue(expectOutput.contains("Tim Berglund"));
+        assertTrue(expectOutput.contains("July 16, 2011"));
+        assertTrue(expectOutput.contains("The JHipster Mini-book"));
+        assertTrue(expectOutput.contains("Richard Dallaway"));
+        assertTrue(expectOutput.contains("May 10, 2010"));
+
+    }
 }

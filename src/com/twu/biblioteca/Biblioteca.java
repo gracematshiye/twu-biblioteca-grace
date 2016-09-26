@@ -29,4 +29,12 @@ public class Biblioteca {
     public void printColumnHeader() {
         System.out.printf(columnFormat(),"TITLE", "AUTHOR", "YEAR PUBLISHED");
     }
+
+    public void printBooksInDetails(List<Book> aBookList) {
+        int counter = 0;
+        for (Book book: aBookList) {
+            ++counter;
+            System.out.printf(columnFormat(),counter + ". " + book.getTitle(), book.getAuthor(), book.getYearPublished());
+        }
+    }
 }
