@@ -11,6 +11,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BibliotecaTest {
 
@@ -41,6 +42,22 @@ public class BibliotecaTest {
         String output = "1. Building and Testing with Gradle\n" +
                 "2. The JHipster Mini-book\n" ;
         assertEquals(output,outSpy.toString());
+    }
+
+    @Test
+    public void columnFormatIsCorrect() throws Exception {
+        String tableFormat = "%-35s %-20s %-20s\n";
+        assertEquals(tableFormat, biblioteca.columnFormat());
+    }
+
+    @Test
+    public void columnHeaderIsDisplayed() throws Exception {
+        biblioteca.printColumnHeader();
+        String expectOutput = new String(outSpy.toByteArray());
+        assertTrue(expectOutput.contains("TITLE"));
+        assertTrue(expectOutput.contains("AUTHOR"));
+        assertTrue(expectOutput.contains("YEAR PUBLISHED"));
+
     }
 
 

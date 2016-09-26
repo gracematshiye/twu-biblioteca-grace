@@ -20,4 +20,13 @@ public class Biblioteca {
         }
         System.out.print(message);
     }
+
+    public String columnFormat() {
+        return "%-35s %-20s %-20s\n";
+
+    }
+
+    public void printColumnHeader() {
+        System.out.printf(columnFormat(),"TITLE", "AUTHOR", "YEAR PUBLISHED");
+    }
 }

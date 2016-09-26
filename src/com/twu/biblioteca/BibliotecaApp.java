@@ -11,11 +11,16 @@ public class BibliotecaApp {
 
         biblioteca.welcomeMessage();
 
-        List<String> listOfBooks= new ArrayList<String>();
-        listOfBooks.add("Building and Testing with Gradle");
-        listOfBooks.add("The JHipster Mini-book");
+        System.out.println("\nHere is a list of all library books");
 
+        List<String> listOfBooks= new ArrayList<String>();
+        listOfBooks.add("Building with Gradle");
+        listOfBooks.add("The JHipster Mini-book");
         biblioteca.displayListOfBook(listOfBooks);
+
+        System.out.println("\n");
+        biblioteca.printColumnHeader();
+
 
     }
 
