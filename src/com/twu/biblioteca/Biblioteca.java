@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,5 +37,11 @@ public class Biblioteca {
             ++counter;
             System.out.printf(columnFormat(),counter + ". " + book.getTitle(), book.getAuthor(), book.getYearPublished());
         }
+    }
+
+    public void mainMenuOptions() {
+        HashMap<Integer,String> menuOption = new HashMap<Integer, String>();
+        menuOption.put(1, "List Books");
+        System.out.print("1. " + menuOption.get(1));
     }
 }

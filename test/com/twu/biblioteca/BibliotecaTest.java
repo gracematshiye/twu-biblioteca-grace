@@ -80,4 +80,11 @@ public class BibliotecaTest {
         assertTrue(expectOutput.contains("May 10, 2010"));
 
     }
+
+    @Test
+    public void mainMenuShouldBeDisplayed() throws Exception {
+        biblioteca.mainMenuOptions();
+        String menuOption1 = "1. List Books";
+        assertEquals(menuOption1, outSpy.toString());
+    }
 }

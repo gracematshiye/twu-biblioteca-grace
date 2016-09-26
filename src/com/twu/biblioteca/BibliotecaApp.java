@@ -28,6 +28,9 @@ public class BibliotecaApp {
         list.add(book2);
         biblioteca.printBooksInDetails(list);
 
+        System.out.println("\nWelcome to the Main Menu. Select your option");
+        biblioteca.mainMenuOptions();
+
 
     }
 
