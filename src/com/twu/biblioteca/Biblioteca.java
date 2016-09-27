@@ -2,15 +2,15 @@ package com.twu.biblioteca;
 
 import java.util.*;
 
-/**
- * Created by gracem on 2016/09/26.
- */
+
 public class Biblioteca {
 
     private List<Book> listOfBooks;
+    private List<Book> checkOutBookList;
 
     public Biblioteca() {
         listOfBooks = new ArrayList<Book>();
+        checkOutBookList = new ArrayList<Book>();
     }
 
     public void welcomeMessage() {
@@ -35,6 +35,9 @@ public class Biblioteca {
     }
     public void addBookInTheBookList(Book book){
         listOfBooks.add(book);
+    }
+    public void addBookToCheckOutListOfBooks(Book book){
+        checkOutBookList.add(book);
     }
 
     public void printBooksInDetails() {
@@ -68,8 +71,11 @@ public class Biblioteca {
     }
     public void checkOutABook(String bookName) {
 
-        if(checkTheBookExist(bookName) != -1){
-            listOfBooks.remove(checkTheBookExist(bookName));
+        int index = checkTheBookExist(bookName, getListOfBooks());
+
+        if(index != -1){
+            addBookToCheckOutListOfBooks(listOfBooks.get(index));
+            listOfBooks.remove(index);
             System.out.print("Thank you! Enjoy the book");
         } else {
             System.out.print("That book is not available.");
@@ -82,13 +88,29 @@ public class Biblioteca {
         return listOfBooks;
     }
 
-    public int checkTheBookExist(String bookName) {
+    public int checkTheBookExist(String bookName, List<Book> list) {
 
-        for (int i = 0; i < getListOfBooks().size(); i++) {
-            if(getListOfBooks().get(i).getTitle().equalsIgnoreCase(bookName)){
-                return i;
+        for (int index = 0; index < list.size(); index++) {
+            if(list.get(index).getTitle().equalsIgnoreCase(bookName)){
+                return index;
             }
         }
         return (-1);
     }
+
+    public List<Book> getCheckOutBookList() {
+        return checkOutBookList;
+    }
+
+    public void returnBook(String title) {
+        int index = checkTheBookExist(title, getCheckOutBookList());
+
+        if(index != -1) {
+            addBookInTheBookList(getCheckOutBookList().get(index));
+        }
+
+
+    }
+
+
 }

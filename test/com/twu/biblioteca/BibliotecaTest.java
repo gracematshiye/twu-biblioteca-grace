@@ -170,9 +170,17 @@ public class BibliotecaTest {
     }
 
     @Test
+    public void checkoutBookShouldBeAddedCheckOutBookList() throws Exception {
+        String bookName = book1.getTitle();
+        biblioteca.checkOutABook(bookName);
+        assertTrue(biblioteca.getCheckOutBookList().contains(book1));
+
+    }
+
+    @Test
     public void givenNonExistingBookNameThenReturnFalse() throws Exception {
         String bookName = "The Java Book";
-        int index = biblioteca.checkTheBookExist(bookName);
+        int index = biblioteca.checkTheBookExist(bookName, biblioteca.getListOfBooks());
         assertFalse(0 <= index);
     }
 
@@ -184,5 +192,29 @@ public class BibliotecaTest {
         assertEquals("That book is not available.",outSpy.toString());
     }
 
+    @Test
+    public void givenTheReturnBookNameShouldExistInTheCheckOutList() throws Exception {
+        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
+        biblioteca.addBookToCheckOutListOfBooks(returnBook);
+        int index = biblioteca.checkTheBookExist(returnBook.getTitle(), biblioteca.getCheckOutBookList());
+        assertTrue(0 <= index);
+    }
+
+
+
+    @Test
+    public void givenAReturnBookNameThenItShouldDisplayedOnListOFBooks() throws Exception {
+        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
+        biblioteca.addBookToCheckOutListOfBooks(returnBook);
+
+        biblioteca.returnBook(returnBook.getTitle());
+        biblioteca.printBooksInDetails();
+
+        String expectOutput = new String(outSpy.toByteArray());
+        assertTrue(expectOutput.contains("The Adventures of Pinocchio"));
+        assertTrue(expectOutput.contains("Richard Dallaway"));
+        assertTrue(expectOutput.contains("May 10, 2010"));
+
+    }
     
 }
