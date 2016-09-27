@@ -44,4 +44,13 @@ public class Biblioteca {
         menuOption.put(1, "List Books");
         System.out.print("1. " + menuOption.get(1));
     }
+
+    public boolean checkMenuOptionIsValid(int menuOption) {
+        if(menuOption != 1){
+            System.out.print("Select a valid option!");
+            return false;
+        }
+
+        return true;
+    }
 }

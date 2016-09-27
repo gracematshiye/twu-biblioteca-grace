@@ -87,4 +87,29 @@ public class BibliotecaTest {
         String menuOption1 = "1. List Books";
         assertEquals(menuOption1, outSpy.toString());
     }
+
+    @Test
+    public void invalidMenuOptionShouldReturnFalse() throws Exception {
+        int menuOptionTwo = 2;
+
+        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionTwo);
+        assertThat(isValid,is(false));
+    }
+
+    @Test
+    public void invalidMenuOptionShouldDisplayErrorMessage() throws Exception {
+
+        int menuOptionTwo = 2;
+        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionTwo);
+        String errorMessage = "Select a valid option!";
+        assertEquals(errorMessage,outSpy.toString());
+
+    }
+
+    @Test
+    public void menuOptionOneShouldBeTrue() throws Exception {
+        int menuOptionOne = 1;
+        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionOne);
+        assertThat(isValid,is(true));
+    }
 }
