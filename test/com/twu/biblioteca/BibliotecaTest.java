@@ -216,5 +216,13 @@ public class BibliotecaTest {
         assertTrue(expectOutput.contains("May 10, 2010"));
 
     }
-    
+
+    @Test
+    public void givenNonExistingBookNameToReturnBookShouldDisplayAErrorMessage() throws Exception {
+        String returnBook = "The moon and the stars";
+        biblioteca.returnBook(returnBook);
+
+        assertEquals("That is not a valid book to return.",outSpy.toString());
+        
+    }
 }
