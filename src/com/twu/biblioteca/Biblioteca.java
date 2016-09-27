@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class Biblioteca {
 
+    private List<Book> listOfBooks;
+
     public void welcomeMessage() {
         System.out.print( "Hello there, Welcome to our Biblioteca\n");
     }
@@ -41,16 +43,24 @@ public class Biblioteca {
 
     public void mainMenuOptions() {
         HashMap<Integer,String> menuOption = new HashMap<Integer, String>();
-        menuOption.put(1, "List Books");
-        System.out.print("1. " + menuOption.get(1));
+        System.out.println("1. List Books");
+        System.out.println("2. Quit");
+
     }
 
     public boolean checkMenuOptionIsValid(int menuOption) {
-        if(menuOption != 1){
+
+        if(menuOption == 2){
+            System.out.print("Goodbye");
+//            System.exit(0);
+            return true;
+
+        }else if(menuOption != 1){
             System.out.print("Select a valid option!");
             return false;
         }
 
         return true;
     }
+
 }

@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -85,12 +86,13 @@ public class BibliotecaTest {
     public void mainMenuShouldBeDisplayed() throws Exception {
         biblioteca.mainMenuOptions();
         String menuOption1 = "1. List Books";
-        assertEquals(menuOption1, outSpy.toString());
+        String expectOutput = new String(outSpy.toByteArray());
+        assertTrue(expectOutput.contains(menuOption1));
     }
 
     @Test
     public void invalidMenuOptionShouldReturnFalse() throws Exception {
-        int menuOptionTwo = 2;
+        int menuOptionTwo = 0;
 
         boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionTwo);
         assertThat(isValid,is(false));
@@ -99,8 +101,8 @@ public class BibliotecaTest {
     @Test
     public void invalidMenuOptionShouldDisplayErrorMessage() throws Exception {
 
-        int menuOptionTwo = 2;
-        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionTwo);
+        int menuOptionZero = 0;
+        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionZero);
         String errorMessage = "Select a valid option!";
         assertEquals(errorMessage,outSpy.toString());
 
@@ -112,4 +114,21 @@ public class BibliotecaTest {
         boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionOne);
         assertThat(isValid,is(true));
     }
+
+    @Test
+    public void quitOptionInTheMainMenuShouldBeDisaplayed() throws Exception {
+        biblioteca.mainMenuOptions();
+        String menuOptions = "1. List Books\n" + "2. Quit\n";
+        assertEquals(menuOptions, outSpy.toString());
+    }
+
+    @Test
+    public void whenTheMenuOptionIsQuitTheProgramShouldEnd() throws Exception {
+        int quitOption = 2;
+        boolean isValid = biblioteca.checkMenuOptionIsValid(quitOption);
+        assertEquals("Goodbye", outSpy.toString());
+        assertThat(isValid,is(true));
+    }
+
+
 }
