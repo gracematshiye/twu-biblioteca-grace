@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -18,10 +19,18 @@ public class BibliotecaTest {
 
     private Biblioteca biblioteca;
     private ByteArrayOutputStream outSpy;
+    private Book book1;
+    private Book book2;
 
     @Before
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
+
+        book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
+        biblioteca.addBookInTheBookList(book1);
+        biblioteca.addBookInTheBookList(book2);
+
         outSpy = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outSpy));
     }
@@ -64,24 +73,17 @@ public class BibliotecaTest {
     @Test
     public void addABookToTheBookList() throws Exception {
 
-        Book book = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        Book newBook = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
         List<Book> aBookList = new ArrayList<Book>();
-        aBookList.add(book);
-        biblioteca.addBookInTheBookList(book);
+        aBookList.add(book1);
+        aBookList.add(book2);
+        aBookList.add(newBook);
+        biblioteca.addBookInTheBookList(newBook);
         assertEquals(aBookList,biblioteca.getListOfBooks());
     }
 
     @Test
     public void listOfBooksInDetailsAreDisplayed() throws Exception {
-
-        Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
-        List<Book> aBookList = new ArrayList<Book>();
-        aBookList.add(book1);
-        aBookList.add(book2);
-
-        biblioteca.addBookInTheBookList(book1);
-        biblioteca.addBookInTheBookList(book2);
 
         biblioteca.printBooksInDetails();
         String expectOutput = new String(outSpy.toByteArray());
@@ -145,16 +147,11 @@ public class BibliotecaTest {
 
     @Test
     public void checkOutABookShouldBeRemovedFromListOfBooks() throws Exception {
-        Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
         List<Book> aBookList = new ArrayList<Book>();
         aBookList.add(book1);
         aBookList.add(book2);
 
-        biblioteca.addBookInTheBookList(book1);
-        biblioteca.addBookInTheBookList(book2);
-
-        biblioteca.checkOutABook(book1);
+        biblioteca.checkOutABook("Building with Gradle");
         aBookList.remove(book1);
         biblioteca.printBooksInDetails();
         assertEquals(aBookList, biblioteca.getListOfBooks());
@@ -167,12 +164,25 @@ public class BibliotecaTest {
 
     @Test
     public void successfulCheckoutMessageShouldBeDisplayed() throws Exception {
-        Book book = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        biblioteca.addBookInTheBookList(book);
-        biblioteca.checkOutABook(book);
-
+        biblioteca.checkOutABook("Building with Gradle");
         assertEquals("Thank you! Enjoy the book",outSpy.toString());
 
     }
 
+    @Test
+    public void givenNonExistingBookNameThenReturnFalse() throws Exception {
+        String bookName = "The Java Book";
+        int index = biblioteca.checkTheBookExist(bookName);
+        assertFalse(0 <= index);
+    }
+
+    @Test
+    public void givenNonExistingBookNameThenDisplayErrorMessage() throws Exception {
+        String bookName = "Language Book";
+        biblioteca.checkOutABook(bookName);
+
+        assertEquals("That book is not available.",outSpy.toString());
+    }
+
+    
 }

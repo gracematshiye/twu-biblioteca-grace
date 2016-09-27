@@ -1,9 +1,6 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by gracem on 2016/09/26.
@@ -69,13 +66,29 @@ public class Biblioteca {
 
         return true;
     }
-    public void checkOutABook(Book book) {
-        listOfBooks.remove(book);
-        System.out.print("Thank you! Enjoy the book");
+    public void checkOutABook(String bookName) {
+
+        if(checkTheBookExist(bookName) != -1){
+            listOfBooks.remove(checkTheBookExist(bookName));
+            System.out.print("Thank you! Enjoy the book");
+        } else {
+            System.out.print("That book is not available.");
+        }
+
+
     }
 
     public List<Book> getListOfBooks() {
         return listOfBooks;
     }
 
+    public int checkTheBookExist(String bookName) {
+
+        for (int i = 0; i < getListOfBooks().size(); i++) {
+            if(getListOfBooks().get(i).getTitle().equalsIgnoreCase(bookName)){
+                return i;
+            }
+        }
+        return (-1);
+    }
 }
