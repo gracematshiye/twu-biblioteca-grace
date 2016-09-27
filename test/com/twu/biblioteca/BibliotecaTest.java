@@ -165,5 +165,14 @@ public class BibliotecaTest {
         assertTrue(expectOutput.contains("May 10, 2010"));
     }
 
+    @Test
+    public void successfulCheckoutMessageShouldBeDisplayed() throws Exception {
+        Book book = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        biblioteca.addBookInTheBookList(book);
+        biblioteca.checkOutABook(book);
+
+        assertEquals("Thank you! Enjoy the book",outSpy.toString());
+
+    }
 
 }

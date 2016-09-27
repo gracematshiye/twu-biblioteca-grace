@@ -71,6 +71,7 @@ public class Biblioteca {
     }
     public void checkOutABook(Book book) {
         listOfBooks.remove(book);
+        System.out.print("Thank you! Enjoy the book");
     }
 
     public List<Book> getListOfBooks() {
