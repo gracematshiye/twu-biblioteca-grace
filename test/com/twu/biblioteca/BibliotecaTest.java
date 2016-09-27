@@ -100,9 +100,11 @@ public class BibliotecaTest {
     @Test
     public void mainMenuShouldBeDisplayed() throws Exception {
         biblioteca.mainMenuOptions();
+        String header = "Main Menu, select your option by entering a number\n";
         String menuOption1 = "1. List Books";
         String expectOutput = new String(outSpy.toByteArray());
         assertTrue(expectOutput.contains(menuOption1));
+        assertTrue(expectOutput.contains(header));
     }
 
     @Test
@@ -131,15 +133,8 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void quitOptionInTheMainMenuShouldBeDisaplayed() throws Exception {
-        biblioteca.mainMenuOptions();
-        String menuOptions = "1. List Books\n" + "2. Quit\n";
-        assertEquals(menuOptions, outSpy.toString());
-    }
-
-    @Test
     public void whenTheMenuOptionIsQuitTheProgramShouldEnd() throws Exception {
-        int quitOption = 2;
+        int quitOption = 99;
         boolean isValid = biblioteca.checkMenuOptionIsValid(quitOption);
         assertEquals("Goodbye", outSpy.toString());
         assertThat(isValid,is(true));
@@ -233,5 +228,35 @@ public class BibliotecaTest {
 
         biblioteca.returnBook(returnBook.getTitle());
         assertEquals("Thank you for returning the book.",outSpy.toString());
+    }
+
+    @Test
+    public void givenNumberOneThenListOfAllBooksShouldBeDisplayed() throws Exception {
+        int number = 1;
+        biblioteca.checkMenuOptionIsValid(number);
+        String expectOutput = new String(outSpy.toByteArray());
+
+        assertTrue(expectOutput.contains("Building with Gradle"));
+        assertTrue(expectOutput.contains("Tim Berglund"));
+        assertTrue(expectOutput.contains("July 16, 2011"));
+        assertTrue(expectOutput.contains("The JHipster Mini-book"));
+        assertTrue(expectOutput.contains("Richard Dallaway"));
+        assertTrue(expectOutput.contains("May 10, 2010"));
+
+    }
+
+
+    @Test
+    public void checkoutOptionInTheMainMenuShoulDisplayInstruction() throws Exception {
+        int menuOptionTwo = 2;
+        biblioteca.checkMenuOptionIsValid(menuOptionTwo);
+        assertEquals("Enter the the name of the Book you want to checkout",outSpy.toString());
+    }
+
+    @Test
+    public void returnOptionInTheMainMenuShoulDisplayInstruction() throws Exception {
+        int menuOptionThree = 3;
+        biblioteca.checkMenuOptionIsValid(menuOptionThree);
+        assertEquals("Enter the the name of the Book you want to return",outSpy.toString());
     }
 }

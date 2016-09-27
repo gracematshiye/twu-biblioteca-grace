@@ -7,6 +7,7 @@ public class Biblioteca {
 
     private List<Book> listOfBooks;
     private List<Book> checkOutBookList;
+    private HashMap<Integer,String> mainMenuOption = new HashMap<Integer, String>();
 
     public Biblioteca() {
         listOfBooks = new ArrayList<Book>();
@@ -49,23 +50,35 @@ public class Biblioteca {
     }
 
     public void mainMenuOptions() {
-        HashMap<Integer,String> menuOption = new HashMap<Integer, String>();
+        System.out.println("Main Menu, select your option by entering a number");
         System.out.println("1. List Books");
-        System.out.println("2. Quit");
+        System.out.println("2. Checkout A book");
+        System.out.println("3. Return");
+        System.out.println("99. Quit");
 
     }
 
     public boolean checkMenuOptionIsValid(int menuOption) {
 
-        if(menuOption == 2){
+        if(menuOption == 99){
             System.out.print("Goodbye");
-//            System.exit(0);
+            System.exit(0);
             return true;
-
+        }else if(menuOption == 2) {
+            System.out.print("Enter the the name of the Book you want to checkout");
+            return true;
+        }
+        else if(menuOption == 3) {
+            System.out.print("Enter the the name of the Book you want to return");
+            return true;
+        }else if(menuOption == 1){
+                printColumnHeader();
+                printBooksInDetails();
         }else if(menuOption != 1){
             System.out.print("Select a valid option!");
             return false;
         }
+
 
         return true;
     }
@@ -114,6 +127,5 @@ public class Biblioteca {
 
 
     }
-
 
 }
