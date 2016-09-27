@@ -62,6 +62,16 @@ public class BibliotecaTest {
     }
 
     @Test
+    public void addABookToTheBookList() throws Exception {
+
+        Book book = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        List<Book> aBookList = new ArrayList<Book>();
+        aBookList.add(book);
+        biblioteca.addBookInTheBookList(book);
+        assertEquals(aBookList,biblioteca.getListOfBooks());
+    }
+
+    @Test
     public void listOfBooksInDetailsAreDisplayed() throws Exception {
 
         Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
@@ -70,7 +80,10 @@ public class BibliotecaTest {
         aBookList.add(book1);
         aBookList.add(book2);
 
-        biblioteca.printBooksInDetails(aBookList);
+        biblioteca.addBookInTheBookList(book1);
+        biblioteca.addBookInTheBookList(book2);
+
+        biblioteca.printBooksInDetails();
         String expectOutput = new String(outSpy.toByteArray());
 
         assertTrue(expectOutput.contains("Building with Gradle"));
@@ -128,6 +141,28 @@ public class BibliotecaTest {
         boolean isValid = biblioteca.checkMenuOptionIsValid(quitOption);
         assertEquals("Goodbye", outSpy.toString());
         assertThat(isValid,is(true));
+    }
+
+    @Test
+    public void checkOutABookShouldBeRemovedFromListOfBooks() throws Exception {
+        Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
+        Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
+        List<Book> aBookList = new ArrayList<Book>();
+        aBookList.add(book1);
+        aBookList.add(book2);
+
+        biblioteca.addBookInTheBookList(book1);
+        biblioteca.addBookInTheBookList(book2);
+
+        biblioteca.checkOutABook(book1);
+        aBookList.remove(book1);
+        biblioteca.printBooksInDetails();
+        assertEquals(aBookList, biblioteca.getListOfBooks());
+
+        String expectOutput = new String(outSpy.toByteArray());
+        assertTrue(expectOutput.contains("The JHipster Mini-book"));
+        assertTrue(expectOutput.contains("Richard Dallaway"));
+        assertTrue(expectOutput.contains("May 10, 2010"));
     }
 
 

@@ -12,6 +12,10 @@ public class Biblioteca {
 
     private List<Book> listOfBooks;
 
+    public Biblioteca() {
+        listOfBooks = new ArrayList<Book>();
+    }
+
     public void welcomeMessage() {
         System.out.print( "Hello there, Welcome to our Biblioteca\n");
     }
@@ -32,10 +36,13 @@ public class Biblioteca {
     public void printColumnHeader() {
         System.out.printf(columnFormat(),"TITLE", "AUTHOR", "YEAR PUBLISHED");
     }
+    public void addBookInTheBookList(Book book){
+        listOfBooks.add(book);
+    }
 
-    public void printBooksInDetails(List<Book> aBookList) {
+    public void printBooksInDetails() {
         int counter = 0;
-        for (Book book: aBookList) {
+        for (Book book: listOfBooks) {
             ++counter;
             System.out.printf(columnFormat(),counter + ". " + book.getTitle(), book.getAuthor(), book.getYearPublished());
         }
@@ -61,6 +68,13 @@ public class Biblioteca {
         }
 
         return true;
+    }
+    public void checkOutABook(Book book) {
+        listOfBooks.remove(book);
+    }
+
+    public List<Book> getListOfBooks() {
+        return listOfBooks;
     }
 
 }

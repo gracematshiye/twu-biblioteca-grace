@@ -23,10 +23,11 @@ public class BibliotecaApp {
 
         Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
         Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
-        List<Book> list = new ArrayList<Book>();
-        list.add(book1);
-        list.add(book2);
-        biblioteca.printBooksInDetails(list);
+
+        biblioteca.addBookInTheBookList(book1);
+        biblioteca.addBookInTheBookList(book2);
+
+        biblioteca.printBooksInDetails();
 
         System.out.println("\nWelcome to the Main Menu. Select your option");
         biblioteca.mainMenuOptions();
