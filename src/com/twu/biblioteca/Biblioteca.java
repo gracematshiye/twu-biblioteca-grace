@@ -107,6 +107,7 @@ public class Biblioteca {
 
         if(index != -1) {
             addBookInTheBookList(getCheckOutBookList().get(index));
+            System.out.print("Thank you for returning the book.");
         } else {
             System.out.print("That is not a valid book to return.");
         }

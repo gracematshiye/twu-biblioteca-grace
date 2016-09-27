@@ -203,7 +203,7 @@ public class BibliotecaTest {
 
 
     @Test
-    public void givenAReturnBookNameThenItShouldDisplayedOnListOFBooks() throws Exception {
+    public void givenAReturnBookNameThenItShouldBeDisplayedOnListOFBooks() throws Exception {
         Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
         biblioteca.addBookToCheckOutListOfBooks(returnBook);
 
@@ -223,6 +223,15 @@ public class BibliotecaTest {
         biblioteca.returnBook(returnBook);
 
         assertEquals("That is not a valid book to return.",outSpy.toString());
-        
+
+    }
+
+    @Test
+    public void givenAReturnBookNameThenSuccesfulMessageShouldBeDisplayed() throws Exception {
+        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
+        biblioteca.addBookToCheckOutListOfBooks(returnBook);
+
+        biblioteca.returnBook(returnBook.getTitle());
+        assertEquals("Thank you for returning the book.",outSpy.toString());
     }
 }
