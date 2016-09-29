@@ -1,49 +1,36 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class BibliotecaApp {
 
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
+
+
+        Scanner scan = new Scanner(System.in);
         Biblioteca biblioteca = new Biblioteca();
-        biblioteca.welcomeMessage();
+        System.out.println(biblioteca.startApplication());
+        Map<Integer, String> mainMenuOptions = biblioteca.getMainMenuOptions();
+        printMenuOption(mainMenuOptions);
 
-        System.out.println("\nHere is a list of all library books");
-        List<String> listOfBooks= new ArrayList<String>();
-        listOfBooks.add("Building with Gradle");
-        listOfBooks.add("The JHipster Mini-book");
-        biblioteca.displayListOfBook(listOfBooks);
-        System.out.println("");
+        int input = scan.nextInt();
 
-        Book book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        Book book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
+        while(input != 99){
 
-        biblioteca.addBookInTheBookList(book1);
-        biblioteca.addBookInTheBookList(book2);
-
-        biblioteca.mainMenuOptions();
-        int option = 0;
-        String bookname = "";
-
-        while(option != 99){
-            option = input.nextInt();
-            biblioteca.checkMenuOptionIsValid(option);
-            bookname = input.next();
-
-            if(option == 2){
-                biblioteca.checkOutABook(bookname);
-            }
-            if(option == 3){
-                biblioteca.returnBook(bookname);
-            }
-            System.out.println("\n");
-            biblioteca.mainMenuOptions();
+            String selectMenu = biblioteca.selectMenu(input);
+            System.out.println(selectMenu);
+            input = scan.nextInt();
         }
     }
 
-
+    private static void printMenuOption(Map<Integer, String> mainMenuOptions) {
+        System.out.println("Main menu");
+        Set<Integer> keys = mainMenuOptions.keySet();
+        for (Integer menuKey: mainMenuOptions.keySet()){
+            System.out.print(menuKey);
+            System.out.print(" \t: \t");
+            System.out.println(mainMenuOptions.get(menuKey));
+        }
+    }
 }

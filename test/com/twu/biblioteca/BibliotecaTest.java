@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,237 +27,100 @@ public class BibliotecaTest {
     public void setUp() throws Exception {
         biblioteca = new Biblioteca();
 
-        book1 = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        book2 = new Book("The JHipster Mini-book", "Richard Dallaway", "May 10, 2010");
-        biblioteca.addBookInTheBookList(book1);
-        biblioteca.addBookInTheBookList(book2);
+        List<Book> listOfBooks= new ArrayList<Book>();
+        listOfBooks.add(new Book("TR  Mark", 1992));
+        listOfBooks.add(new Book("JF Malfa", 2009));
+        biblioteca.setListOfBooks(listOfBooks);
 
-        outSpy = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outSpy));
     }
 
     @Test
     public void welcomeMessageIsDisplayed() throws Exception {
-        biblioteca.welcomeMessage();
-        assertEquals("Hello there, Welcome to our Biblioteca\n", outSpy.toString());
+        String message = biblioteca.startApplication();
+        assertEquals("Hello there, Welcome to our Biblioteca\n", message);
 
     }
 
     @Test
     public void listOfAllLibraryBooksIsDisplayed() throws Exception {
-        List<String> listOfBooks= new ArrayList<String>();
-        listOfBooks.add("Building and Testing with Gradle");
-        listOfBooks.add("The JHipster Mini-book");
 
-        biblioteca.displayListOfBook(listOfBooks);
-        String output = "1. Building and Testing with Gradle\n" +
-                "2. The JHipster Mini-book\n" ;
-        assertEquals(output,outSpy.toString());
+        List<Book> result = biblioteca.getListOfBooks();
+        assertEquals(2, result.size());
     }
 
     @Test
-    public void columnFormatIsCorrect() throws Exception {
-        String tableFormat = "%-35s %-20s %-20s\n";
-        assertEquals(tableFormat, biblioteca.columnFormat());
+    public void testBookDetails() throws Exception {
+        List<Book> listOfBooks= new ArrayList<Book>();
+        listOfBooks.add(new Book("Grace", 2011));
+        biblioteca.setListOfBooks(listOfBooks);
+        assertEquals(1, biblioteca.getListOfBooks().size());
+        assertEquals("Grace", biblioteca.getListOfBooks().get(0).getAuthor());
+        assertEquals(2011, biblioteca.getListOfBooks().get(0).getYearPublished());
     }
 
     @Test
-    public void columnHeaderIsDisplayed() throws Exception {
-        biblioteca.printColumnHeader();
-        String expectOutput = new String(outSpy.toByteArray());
-        assertTrue(expectOutput.contains("TITLE"));
-        assertTrue(expectOutput.contains("AUTHOR"));
-        assertTrue(expectOutput.contains("YEAR PUBLISHED"));
-
+    public void testMainMenuOption() throws Exception {
+        Map<Integer, String> mainMenu = biblioteca.getMainMenuOptions();
+        assertTrue(mainMenu.keySet().contains(1));
+        assertEquals("List books", mainMenu.get(1));
     }
 
     @Test
-    public void addABookToTheBookList() throws Exception {
-
-        Book newBook = new Book("Building with Gradle", "Tim Berglund", "July 16, 2011");
-        List<Book> aBookList = new ArrayList<Book>();
-        aBookList.add(book1);
-        aBookList.add(book2);
-        aBookList.add(newBook);
-        biblioteca.addBookInTheBookList(newBook);
-        assertEquals(aBookList,biblioteca.getListOfBooks());
+    public void testInvalidMenuOption() throws Exception {
+        String menuResults = biblioteca.selectMenu(2);
+        assertEquals("Select a valid option!", menuResults);
     }
 
     @Test
-    public void listOfBooksInDetailsAreDisplayed() throws Exception {
-
-        biblioteca.printBooksInDetails();
-        String expectOutput = new String(outSpy.toByteArray());
-
-        assertTrue(expectOutput.contains("Building with Gradle"));
-        assertTrue(expectOutput.contains("Tim Berglund"));
-        assertTrue(expectOutput.contains("July 16, 2011"));
-        assertTrue(expectOutput.contains("The JHipster Mini-book"));
-        assertTrue(expectOutput.contains("Richard Dallaway"));
-        assertTrue(expectOutput.contains("May 10, 2010"));
-
+    public void testQuitMenuOption() throws Exception {
+        String menuResults = biblioteca.selectMenu(99);
+        assertEquals("Quit", menuResults);
     }
 
     @Test
-    public void mainMenuShouldBeDisplayed() throws Exception {
-        biblioteca.mainMenuOptions();
-        String header = "Main Menu, select your option by entering a number\n";
-        String menuOption1 = "1. List Books";
-        String expectOutput = new String(outSpy.toByteArray());
-        assertTrue(expectOutput.contains(menuOption1));
-        assertTrue(expectOutput.contains(header));
+    public void testCheckOutBook() throws Exception {
+        assertEquals(2, biblioteca.getListOfBooks().size());
+        biblioteca.checkOutBook(new Book("TR  Mark", 1992));
+        assertEquals(1, biblioteca.getListOfBooks().size());
     }
 
     @Test
-    public void invalidMenuOptionShouldReturnFalse() throws Exception {
-        int menuOptionTwo = 0;
-
-        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionTwo);
-        assertThat(isValid,is(false));
+    public void testSuccessfulCheckout() throws Exception {
+        String checkoutMessage = biblioteca.checkOutBook(new Book("TR  Mark", 1992));
+        assertEquals("Thank you! Enjoy the book", checkoutMessage);
     }
 
     @Test
-    public void invalidMenuOptionShouldDisplayErrorMessage() throws Exception {
-
-        int menuOptionZero = 0;
-        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionZero);
-        String errorMessage = "Select a valid option!";
-        assertEquals(errorMessage,outSpy.toString());
+    public void testUnsuccessfulCheckout() throws Exception {
+        String checkoutMessage = biblioteca.checkOutBook(new Book("TR  John", 1992));
+        assertEquals("That book is not available", checkoutMessage);
 
     }
 
     @Test
-    public void menuOptionOneShouldBeTrue() throws Exception {
-        int menuOptionOne = 1;
-        boolean isValid = biblioteca.checkMenuOptionIsValid(menuOptionOne);
-        assertThat(isValid,is(true));
+    public void testReturnBook() throws Exception {
+        assertEquals(2, biblioteca.getListOfBooks().size());
+        Book book = new Book("TR  Mark", 1992);
+        biblioteca.checkOutBook(book);
+        assertEquals(1, biblioteca.getListOfBooks().size());
+
+        biblioteca.returnBook(book);
+        assertEquals(2, biblioteca.getListOfBooks().size());
     }
 
     @Test
-    public void whenTheMenuOptionIsQuitTheProgramShouldEnd() throws Exception {
-        int quitOption = 99;
-        boolean isValid = biblioteca.checkMenuOptionIsValid(quitOption);
-        assertEquals("Goodbye", outSpy.toString());
-        assertThat(isValid,is(true));
+    public void testSuccessfulReturnBook() throws Exception {
+        Book book = new Book("TR  Mark", 1992);
+        biblioteca.checkOutBook(book);
+        String returnBookMessage = biblioteca.returnBook(book);
+        assertEquals("Thank you for returning the book", returnBookMessage);
     }
 
     @Test
-    public void checkOutABookShouldBeRemovedFromListOfBooks() throws Exception {
-        List<Book> aBookList = new ArrayList<Book>();
-        aBookList.add(book1);
-        aBookList.add(book2);
-
-        biblioteca.checkOutABook("Building with Gradle");
-        aBookList.remove(book1);
-        biblioteca.printBooksInDetails();
-        assertEquals(aBookList, biblioteca.getListOfBooks());
-
-        String expectOutput = new String(outSpy.toByteArray());
-        assertTrue(expectOutput.contains("The JHipster Mini-book"));
-        assertTrue(expectOutput.contains("Richard Dallaway"));
-        assertTrue(expectOutput.contains("May 10, 2010"));
-    }
-
-    @Test
-    public void successfulCheckoutMessageShouldBeDisplayed() throws Exception {
-        biblioteca.checkOutABook("Building with Gradle");
-        assertEquals("Thank you! Enjoy the book",outSpy.toString());
-
-    }
-
-    @Test
-    public void checkoutBookShouldBeAddedCheckOutBookList() throws Exception {
-        String bookName = book1.getTitle();
-        biblioteca.checkOutABook(bookName);
-        assertTrue(biblioteca.getCheckOutBookList().contains(book1));
-
-    }
-
-    @Test
-    public void givenNonExistingBookNameThenReturnFalse() throws Exception {
-        String bookName = "The Java Book";
-        int index = biblioteca.checkTheBookExist(bookName, biblioteca.getListOfBooks());
-        assertFalse(0 <= index);
-    }
-
-    @Test
-    public void givenNonExistingBookNameThenDisplayErrorMessage() throws Exception {
-        String bookName = "Language Book";
-        biblioteca.checkOutABook(bookName);
-
-        assertEquals("That book is not available.",outSpy.toString());
-    }
-
-    @Test
-    public void givenTheReturnBookNameShouldExistInTheCheckOutList() throws Exception {
-        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
-        biblioteca.addBookToCheckOutListOfBooks(returnBook);
-        int index = biblioteca.checkTheBookExist(returnBook.getTitle(), biblioteca.getCheckOutBookList());
-        assertTrue(0 <= index);
+    public void testUnsuccessfulReturnBook() throws Exception {
+        String returnBookMessage = biblioteca.returnBook(new Book("TR  Mark", 1992));
+        assertEquals("That is not a valid book to return", returnBookMessage);
     }
 
 
-
-    @Test
-    public void givenAReturnBookNameThenItShouldBeDisplayedOnListOFBooks() throws Exception {
-        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
-        biblioteca.addBookToCheckOutListOfBooks(returnBook);
-
-        biblioteca.returnBook(returnBook.getTitle());
-        biblioteca.printBooksInDetails();
-
-        String expectOutput = new String(outSpy.toByteArray());
-        assertTrue(expectOutput.contains("The Adventures of Pinocchio"));
-        assertTrue(expectOutput.contains("Richard Dallaway"));
-        assertTrue(expectOutput.contains("May 10, 2010"));
-
-    }
-
-    @Test
-    public void givenNonExistingBookNameToReturnBookShouldDisplayAErrorMessage() throws Exception {
-        String returnBook = "The moon and the stars";
-        biblioteca.returnBook(returnBook);
-
-        assertEquals("That is not a valid book to return.",outSpy.toString());
-
-    }
-
-    @Test
-    public void givenAReturnBookNameThenSuccesfulMessageShouldBeDisplayed() throws Exception {
-        Book returnBook = new Book("The Adventures of Pinocchio", "Richard Dallaway", "May 10, 2010");
-        biblioteca.addBookToCheckOutListOfBooks(returnBook);
-
-        biblioteca.returnBook(returnBook.getTitle());
-        assertEquals("Thank you for returning the book.",outSpy.toString());
-    }
-
-    @Test
-    public void givenNumberOneThenListOfAllBooksShouldBeDisplayed() throws Exception {
-        int number = 1;
-        biblioteca.checkMenuOptionIsValid(number);
-        String expectOutput = new String(outSpy.toByteArray());
-
-        assertTrue(expectOutput.contains("Building with Gradle"));
-        assertTrue(expectOutput.contains("Tim Berglund"));
-        assertTrue(expectOutput.contains("July 16, 2011"));
-        assertTrue(expectOutput.contains("The JHipster Mini-book"));
-        assertTrue(expectOutput.contains("Richard Dallaway"));
-        assertTrue(expectOutput.contains("May 10, 2010"));
-
-    }
-
-
-    @Test
-    public void checkoutOptionInTheMainMenuShoulDisplayInstruction() throws Exception {
-        int menuOptionTwo = 2;
-        biblioteca.checkMenuOptionIsValid(menuOptionTwo);
-        assertEquals("Enter the the name of the Book you want to checkout",outSpy.toString());
-    }
-
-    @Test
-    public void returnOptionInTheMainMenuShoulDisplayInstruction() throws Exception {
-        int menuOptionThree = 3;
-        biblioteca.checkMenuOptionIsValid(menuOptionThree);
-        assertEquals("Enter the the name of the Book you want to return",outSpy.toString());
-    }
 }

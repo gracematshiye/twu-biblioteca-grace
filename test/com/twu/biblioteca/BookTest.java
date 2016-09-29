@@ -11,8 +11,8 @@ public class BookTest {
 
     @Before
     public void setUp() throws Exception {
-        book1 = new Book("Java OOP", "J.R Berglund", "July 16, 2011");
-        book2 = new Book("Gradle for Beginners", "D.R Dallaway", "May 10, 2010");
+        book1 = new Book("J.R Berglund", 2011);
+        book2 = new Book("D.R Dallaway", 2010);
     }
 
     @Test
