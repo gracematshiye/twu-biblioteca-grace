@@ -3,7 +3,6 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +74,9 @@ public class BibliotecaTest {
 
     @Test
     public void testInvalidMenuOption() throws Exception {
-        String menuResults = biblioteca.selectMenu(2);
+        String menuResults = biblioteca.selectMenu(8);
+        assertEquals("Select a valid option!", menuResults);
+        menuResults = biblioteca.selectMenu(9);
         assertEquals("Select a valid option!", menuResults);
     }
 
@@ -99,9 +100,9 @@ public class BibliotecaTest {
         Book book = new Book("TR  Mark", 1992);
         biblioteca.checkOutBook(book, user);
         assertEquals(1, biblioteca.getCheckOutBookList().size());
-        BookUser bookUser = biblioteca.getCheckOutBookList().get(0);
-        assertEquals(user, bookUser.getUser());
-        assertEquals(book, bookUser.getBook());
+        Map<Book, User> bookUser = biblioteca.getCheckOutBookList();
+        assertEquals(user, bookUser.get(book));
+        assertTrue(bookUser.containsKey(book));
     }
 
     @Test
@@ -212,22 +213,4 @@ public class BibliotecaTest {
 
     }
 
-    @Test
-    public void testGetUserInformation() throws Exception {
-        User myUser = new User("147-1234", "pass123");
-        assertFalse(myUser.isLoggedIn());
-        assertNull(myUser.getName());
-        assertNull(myUser.getEmail());
-        assertNull(myUser.getPhoneNumber());
-    }
-
-    @Test
-    public void testGetUserInformationValid() throws Exception {
-        User myUser = new User("147-1234", "pass123");
-        User loggedInUser = biblioteca.login(myUser);
-        assertTrue(loggedInUser.isLoggedIn());
-        assertEquals("Sipho", loggedInUser.getName());
-        assertEquals("sipho@gmail.com", loggedInUser.getEmail());
-        assertEquals("2581479632", loggedInUser.getPhoneNumber());
-    }
 }

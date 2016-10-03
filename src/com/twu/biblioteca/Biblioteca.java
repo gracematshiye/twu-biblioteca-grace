@@ -6,7 +6,7 @@ import java.util.*;
 public class Biblioteca {
 
     private List<Book> listOfBooks;
-    private List<BookUser> checkOutBookList;
+    private Map<Book, User> checkOutBookList;
     private Map<Integer,String> mainMenuOptions;
     private List<Movie> movieList;
     private List<User> listOfUser;
@@ -14,10 +14,16 @@ public class Biblioteca {
 
     public Biblioteca() {
         listOfBooks = new ArrayList<Book>();
-        checkOutBookList = new ArrayList<BookUser>();
+        checkOutBookList = new HashMap<Book, User>();
         listOfUser = new ArrayList<User>();
         mainMenuOptions = new HashMap<Integer, String>();
         this.mainMenuOptions.put(1, "List books");
+        this.mainMenuOptions.put(2, "List movies");
+        this.mainMenuOptions.put(3, "Check-out book");
+        this.mainMenuOptions.put(4, "Check-out movie");
+        this.mainMenuOptions.put(5, "Return a book");
+        this.mainMenuOptions.put(6, "User information");
+        this.mainMenuOptions.put(7, "List of users who checked-out a book");
         this.mainMenuOptions.put(99, "Quit");
     }
 
@@ -46,7 +52,7 @@ public class Biblioteca {
         if(user.isLoggedIn()) {
             for (Book existingBook : listOfBooks) {
                 if (existingBook.equals(book)) {
-                    checkOutBookList.add(new BookUser(existingBook, user));
+                    checkOutBookList.put(existingBook, user);
                     listOfBooks.remove(existingBook);
                     return "Thank you! Enjoy the book";
                 }
@@ -59,10 +65,10 @@ public class Biblioteca {
     public String returnBook(Book book, User user) {
 
         if(user.isLoggedIn()) {
-            for (BookUser checkedOutBookUser : checkOutBookList) {
-                if (checkedOutBookUser.getBook().equals(book)) {
-                    listOfBooks.add(checkedOutBookUser.getBook());
-                    checkOutBookList.remove(checkedOutBookUser);
+            for(Map.Entry<Book, User> entry : checkOutBookList.entrySet()){
+                if (entry.getKey().equals(book)) {
+                    listOfBooks.add(entry.getKey());
+                    checkOutBookList.remove(entry);
                     return "Thank you for returning the book";
                 }
             }
@@ -121,16 +127,15 @@ public class Biblioteca {
         return listOfUser;
     }
 
-    public List<BookUser> getCheckOutBookList() {
+    public Map<Book, User> getCheckOutBookList() {
         return checkOutBookList;
     }
 
     public User whoHasBookCheckedOut(Book book) {
-        for (BookUser bookUser: checkOutBookList) {
-            if(bookUser.getBook().equals(book)){
-                return bookUser.getUser();
+    for(Map.Entry<Book, User> bookUser : checkOutBookList.entrySet()){
+            if(bookUser.getKey().equals(book)){
+                return bookUser.getValue();
             }
-
         }
         return null;
     }
